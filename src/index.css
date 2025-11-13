@@ -2,45 +2,128 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Press+Start+2P&display=swap');
+
 @layer base {
   :root {
     --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-geist: 'Geist', system-ui, sans-serif;
-    --font-geist-mono: 'Geist Mono', monospace;
-    --font-mona: 'Mona Sans', system-ui, sans-serif;
-    --font-ibm-plex: 'IBM Plex Sans', system-ui, sans-serif;
-    --font-manrope: 'Manrope', system-ui, sans-serif;
+    --font-pixel: 'Press Start 2P', cursive;
+
+    /* Palette */
+    --cream: #FFF7EA;
+    --navy: #0B1B2B;
+    --teal: #7EC8C9;
+    --teal-600: #3FA3A5;
+    --pink: #F7AEC0;
+    --pink-600: #E47A97;
+    --glow: rgba(126, 200, 201, 0.45);
   }
 
   html {
     font-family: var(--font-sans);
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    scroll-behavior: smooth;
+    background: var(--navy);
   }
 
   body {
-    @apply antialiased;
+    @apply antialiased text-slate-100 bg-[color:var(--navy)];
+  }
+
+  h1,h2,h3,h4,h5,h6,.font-pixel{
+    font-family: var(--font-pixel);
+    letter-spacing: 0.5px;
   }
 }
 
-/* Custom utility classes for shadcn/ui patterns */
-@layer utilities {
-  .animate-in {
-    animation-name: animateIn;
-    animation-duration: 350ms;
-    --tw-enter-opacity: initial;
-    --tw-enter-scale: initial;
-    --tw-enter-rotate: initial;
-    --tw-enter-translate-x: initial;
-    --tw-enter-translate-y: initial;
-  }
+/* Animations */
+@keyframes fadeUp {
+  from {opacity: 0; transform: translateY(16px)}
+  to {opacity: 1; transform: translateY(0)}
+}
 
-  .animate-out {
-    animation-name: animateOut;
-    animation-duration: 350ms;
-    --tw-exit-opacity: initial;
-    --tw-exit-scale: initial;
-    --tw-exit-rotate: initial;
-    --tw-exit-translate-x: initial;
-    --tw-exit-translate-y: initial;
-  }
+@keyframes pulseSoft {
+  0%,100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(126,200,201,0.0)); }
+  50% { transform: scale(1.02); filter: drop-shadow(0 0 8px var(--glow)); }
+}
+
+@keyframes floatSlow {
+  0% { transform: translateY(0px) }
+  50% { transform: translateY(-6px) }
+  100% { transform: translateY(0px) }
+}
+
+/* Reveal utility (IntersectionObserver toggles .in-view) */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in-view { opacity: 1; transform: translateY(0); }
+
+/* Pixel borders and UI vibes */
+.pixel-border {
+  background: linear-gradient(var(--cream), var(--cream));
+  box-shadow:
+    0 0 0 3px #1B2B3B,
+    0 0 0 6px #2B3B4B,
+    inset 0 0 0 2px rgba(0,0,0,0.05);
+}
+
+.pixel-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.05) inset;
+  backdrop-filter: blur(2px);
+}
+
+.glow-hover {
+  transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+}
+.glow-hover:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(126,200,201,0.35), 0 0 0 1px rgba(255,255,255,0.08) inset;
+  filter: drop-shadow(0 0 10px var(--glow));
+}
+
+.btn-cta {
+  background: linear-gradient(90deg, var(--teal-600), var(--teal));
+  color: #041521;
+  border: 2px solid rgba(255,255,255,0.35);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+}
+.btn-cta:hover { filter: brightness(1.05) saturate(1.1); }
+.btn-cta:active { transform: translateY(1px); }
+
+.hero-overlay {
+  background: radial-gradient(1200px 600px at 50% 20%, rgba(255,255,255,0.08), transparent 60%),
+              linear-gradient(180deg, rgba(11,27,43,0) 0%, rgba(11,27,43,0.6) 70%, rgba(11,27,43,0.9) 100%);
+}
+
+/* Dialogue box */
+.dialogue {
+  background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.06));
+  border: 2px solid rgba(255,255,255,0.3);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+
+/* Timeline */
+.timeline:before {
+  content: '';
+  position: absolute; left: 20px; top: 0; bottom: 0;
+  width: 2px; background: linear-gradient(var(--teal), transparent);
+}
+.timeline-item { position: relative; padding-left: 56px; }
+.timeline-item:before {
+  content: '';
+  position: absolute; left: 12px; top: 6px; width: 16px; height: 16px;
+  background: var(--pink);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.25), 0 0 12px rgba(247,174,192,0.55);
+}
+
+/* Parallax helper */
+.parallax-layer { will-change: transform; }
+
+/* Reduced motion */
+@media (max-width: 640px), (prefers-reduced-motion: reduce) {
+  .glow-hover:hover { transform: none; box-shadow: none; filter: none; }
+  .btn-cta { animation: none !important; }
+  .reveal { transition-duration: .4s; }
 }
